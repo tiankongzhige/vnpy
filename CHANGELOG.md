@@ -1,4 +1,113 @@
-# 2.2.1版本
+# 2.6.0版本
+
+## 新增
+1. 增加双边报价业务的发送和撤销函数功能
+2. 增加双边报价监控UI组件
+3. 增加用于对接数据库的抽象接口vnpy.trader.database
+4. 新增基于Arctic的MongoDB数据库接口项目vnpy_arctic
+5. 新增LevelDB数据库接口项目vnpy_leveldb
+6. 新增DolphinDB数据库接口项目vnpy_dolphindb
+7. 增加用于对接数据服务的抽象接口vnpy.trader.datafeed
+8. 新增TuShare数据服务项目vnpy_tushare
+8. 新增恒生UData数据服务项目vnpy_udata
+8. 新增天勤TQSDK数据服务项目vnpy_tqsdk
+8. 新增CoinAPI数据服务项目vnpy_coinapi
+
+## 调整
+1. 移除批量委托和批量撤单相关的函数功能
+2. 移除老虎证券交易接口TigerGateway
+3. 移除鑫管家交易接口XgjGateway
+4. 移除AlgoTrading算法交易模块对于金纳算法服务的支持
+5. RestClient增加对操作系统代理配置的支持
+6. RestClient和WebsocketClient的默认异常处理逻辑由抛出异常修改为打印输出
+7. 价差交易模块移除对反向合约、线性价差、开平字段的支持
+8. 价差交易模块优化对灵活价差的支持，优化价差行情推送过滤判断
+9. 价差交易算法停止时，等待全部委托结束、各条腿平衡后，再结束算法
+
+## 修复
+1. 修复在Linux/Mac系统上，运行多进程优化时的进程启动错误
+2. 修复WebsocketClient由于心跳机制不完善，导致的频繁断线问题
+
+## 剥离
+1. 将米筐数据接口剥离到vnpy_rqdata项目中，并升级到2.9.38版本
+2. 将行情录制模块剥离到vnpy_datarecorder项目中
+3. 将K线图表模块剥离到vnpy_chartwizard项目中
+4. 将SQLite数据库接口剥离到vnpy_sqlite项目中
+5. 将MySQL数据库接口剥离到vnpy_mysql项目中
+6. 将PostgreSQL数据库接口剥离到vnpy_postgresql项目中
+7. 将MongoDB数据库接口剥离到vnpy_mongodb项目中
+8. 将InfluxDB数据库接口剥离到vnpy_influxdb项目中
+9. 将火币交易所相关接口剥离到vnpy_huobi项目中
+10. 将Bitstamp交易所相关接口剥离到vnpy_bitstamp项目中
+11. 将Coinbase交易所相关接口剥离到vnpy_coinbase项目中
+12. 将Bitfinex交易所相关接口剥离到vnpy_bitfinex项目中
+13. 将期权波动率交易模块剥离到vnpy_optionmaster项目中
+
+
+# 2.5.0版本
+## 新增
+1. 新增TTS交易系统（兼容CTP的仿真交易环境）的接口vnpy_tts（6.5.1）
+2. 新增易盛启明星/北斗星兼容交易API的接口vnpy_esunny（1.0.2.2）
+3. 新增BarData和TickData的成交额turnover字段
+
+## 调整
+1. 将SpreadTrading模块策略初始化时的K线价差数据加载，改为优先通过RQData查询数据
+2. 在MainWindow的AboutDialog中，基于importlib_metadata模块来获取版本信息
+3. 隐藏所有对话框右上角的【？】按钮
+4. 将易盛外盘TapGateway的合约信息，从行情接口获取改为交易接口获取（避免外盘合约size为0的问题）
+5. 改进VN Trader的异常捕捉对话框弹出方式，避免多次重复报错情况下的程序卡死崩溃
+
+## 修复
+1. 修复Linux下安装时，对于已经剥离的XTP API的自动编译操作
+2. 修复PortfolioManager的UI组件，对于成交事件监听类型错误的BUG
+3. 修复vnpy_rest下的Response对象缺乏text字段导致的BUG
+4. 修复数字货币类接口，代理端口信息传空时，导致底层连接出错的BUG
+5. 修复BitstampGateway，由于_process_request函数参数数量不匹配导致的BUG
+6. 修复ArrayManager的Aroon指标计算输出结果顺序错误的BUG
+7. 修复数据库管理器读写TickData时，由于缺少对localtime字段处理导致的BUG
+8. 修复币安现货接口，对于不支持类型的委托（停止单等）收到推送后导致的BUG
+
+## 剥离
+1. 将融航接口剥离到vnpy_rohon项目中，并升级到6.5.1版本
+2. 将CTP MINI接口剥离到vnpy_mini项目中，并升级到1.5.6版本
+3. 将CTP期权接口剥离到vnpy_sopt项目中
+4. 将恒生UFT柜台极速API接口剥离到vnpy_uft项目中
+
+
+# 2.4.0版本
+
+## 新增
+1. 新增TickData的本地时间戳字段local_time（不带时区信息）
+2. 新增基于asyncio和aiohttp实现的协程异步REST API客户端vnpy_rest项目
+3. 新增基于asyncio和aiohttp实现的协程异步Websocket API客户端vnpy_websocket项目
+4. 新增基于多进程模式的遗传算法优化功能
+5. 新增XTP的API封装中，行情登录函数对于本地网卡地址的参数支持
+
+## 调整
+1. 将Deribit接口剥离到vnpy_deribit项目中，并升级到2.0.1版本
+2. 剥离CTA策略模块下的穷举和遗传优化算法到vnpy.trader.optimize模块下
+3. 遗传算法优化完成后，输出所有回测过的参数对应结果（而不只是最优结果）
+4. CTA策略引擎加载策略文件时，增加模块重载的操作，使得任何策略文件修改可以立即生效
+5. CTA策略引擎扫描特定目录下的策略文件时，使用glob函数（替换原有的os.walk），避免对子目录中文件的错误加载
+6. 将CTA策略模块剥离到vnpy_ctastrategy项目中
+7. 将CTA回测模块剥离到vnpy_ctabacktester项目中
+8. 将XTP接口剥离到vnpy_xtp项目中，并升级到2.2.27.4版本
+9. 将事前风控模块剥离到vnpy_riskmanager项目中
+10. 将数据管理模块剥离到vnpy_datamanager项目中
+11. 将Deribit接口剥离到vnpy_bybit项目中，并升级到2021.6.21版本
+
+## 修复
+1. 修复BinancesGateway由于撤单请求失败，导致委托持续处于【提交中】状态的问题
+2. 修复MySQL和PostgreSQL数据库管理器删除K线数据时出错的问题
+3. 修复基于aiohttp的RestClient和WebsocketClient，事件循环停止后重新启动失败的问题
+4. 修复BinancesGateway由于保持会话流超时失败，导致的系统卡死问题
+5. 修复HuobisGateway，订阅O3-USDT（代码中有数字）合约行情失败的问题
+6. 修复BinanceGateway，使用市价下单报错的问题
+7. 修复CtaBacktester基于Tick级别数据进行参数优化时，启动优化失败的问题
+8. 修复ToraStockGateway和ToraOptionGateway，调用下单函数时没有返回委托号的问题
+9. 修复InfluxDB数据管理器，导入数据时时间字段解析错误的问题
+
+# 2.3.0版本
 
 ## 修复
 1. 修复IbGateway断线重连后，没有自动订阅之前已订阅的合约行情问题
@@ -14,13 +123,15 @@
 11. 修复IbGateway，当要查询的合约历史数据不存在时卡死的问题
 12. 修复IbGateway，查询返回的合约乘数（字符串）未作转换导致的上层应用问题
 13. 修复BitfinexGateway，查询的历史数据OHLC字段取值错误问题
-
+14. 修复BarGenerator，在合成小时K线时部分情况下遗漏分钟K线收盘价更新的问题
+15. 修复UftGateway，在连接ETF期权服务器时无法订阅行情的问题
+16. 修复UftGateway，在连接ETF期权服务器时，对于包含毫秒的委托时间戳处理错误的问题
 
 ## 调整
 1. 修改CTA模块的净仓交易模式，支持上期所和能交所的今昨仓拆分下单
 2. 调整组合策略模块的回测引擎K线回放逻辑，当某个时间点K线数据缺失时，推送给策略的K线字典中不对其进行向前补齐
 3. 将CTP接口和API封装，剥离到vnpy_ctp项目中
-4. 将CTP穿透式测试接口和API封装，剥离到vnpy_ctptest项中
+4. 将CTP穿透式测试接口和API封装，剥离到vnpy_ctptest项目中
 
 ## 新增
 1. 新增DataManager在导入CSV文件时，对于时间戳时区的选择功能
